@@ -1,10 +1,14 @@
-import express from "express"
-import { getMaterialReceiptRegister,insertMaterialReceiptRegisterHeader } from "../controllers/materialReceiptRegister.js"; 
+import express from "express";
+import {
+  getMaterialReceiptRegister,
+  insertMaterialReceiptRegisterHeader,
+  updateMaterialReceiptRegisterHeader,
+} from "../controllers/materialReceiptRegister.js";
 
+const router = express.Router();
 
-const router = express.Router()
-
-router.get("/",getMaterialReceiptRegister);
-router.post("/insertHeader",insertMaterialReceiptRegisterHeader);
+router.get("/", getMaterialReceiptRegister);
+router.post("/insertHeader", insertMaterialReceiptRegisterHeader);
+router.put("/updateHeader", updateMaterialReceiptRegisterHeader);
 
 export default router;
