@@ -1,34 +1,39 @@
-import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import dotenv from "dotenv";
-import helmet from "helmet";
-import morgan from "morgan";
-import "./db/conn.js";
-import customer from "./routes/customer.js";
-import custBomList from "./routes/custBomList.js";
-import materialReceiptRegister from "./routes/materialReceiptRegister.js";
-import mtrlPartReceiptDetail from "./routes/mtrlPartReceiptDetail.js";
-
-/* Configuration */
-dotenv.config();
+const express = require("express");
+require("dotenv").config();
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const { logger } = require("./helpers/logger");
 const app = express();
-const port = 5000;
 
-app.use(express.json());
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(morgan("common"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.get("/", (req, res) => {
+  res.send("hello");
+});
 
-app.use("/api/customer", customer);
-app.use("/api/custBomList", custBomList);
-app.use("/api/materialReceiptRegister", materialReceiptRegister);
-app.use("/api/mtrlPartReceiptDetail", mtrlPartReceiptDetail);
+//customer
+const customerRouter = require("./routes/materialmgt/customer");
+app.use("/customers", customerRouter);
 
-app.get("/", (req, res) => res.send("Hello Express"));
-app.all("*", (req, res) => res.send("Routes doesn't Exists"));
+//cust bom list
+const custBomListRouter = require("./routes/materialmgt/custBomList");
+app.use("/custbomlist", custBomListRouter);
 
-app.listen(port, () => console.log(`Server is listiening on port : ${port}`));
+//material receipt voucher
+const materialReceiptRegisterRouter = require("./routes/materialmgt/materialReceiptRegister");
+app.use("/materialReceiptRegister", materialReceiptRegisterRouter);
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.send({
+    error: {
+      status: err.status || 500,
+      message: err.message,
+    },
+  });
+  logger.error(`Status Code : ${err.status}  - Error : ${err.message}`);
+});
+
+// starting the server
+app.listen(process.env.PORT, () => {
+  console.log("listening on port " + process.env.PORT);
+  logger.info("listening on port " + process.env.PORT);
+});
