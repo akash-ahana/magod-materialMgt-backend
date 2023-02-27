@@ -1,9 +1,16 @@
+/*import express from "express";
+import { logger } from "./helpers/logger";*/
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { logger } = require("./helpers/logger");
 const app = express();
+
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("hello");
@@ -21,7 +28,15 @@ app.use("/custbomlist", custBomListRouter);
 const materialReceiptRegisterRouter = require("./routes/materialmgt/materialReceiptRegister");
 app.use("/materialReceiptRegister", materialReceiptRegisterRouter);
 
-app.use((err, req, res, next) => {
+//material part receipt details
+const mtrlPartReceiptDetailsRouter = require("./routes/materialmgt/mtrlPartReceiptDetails");
+app.use("/mtrlPartReceiptDetails", mtrlPartReceiptDetailsRouter);
+
+//running No
+const runningNoRouter = require("./routes/materialmgt/runningNo");
+app.use("/runningNo", runningNoRouter);
+
+/*app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send({
     error: {
@@ -30,7 +45,7 @@ app.use((err, req, res, next) => {
     },
   });
   logger.error(`Status Code : ${err.status}  - Error : ${err.message}`);
-});
+});*/
 
 // starting the server
 app.listen(process.env.PORT, () => {
