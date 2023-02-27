@@ -5,6 +5,7 @@ const { misQuery, setupQuery, misQueryMod } = require("../../helpers/dbconn");
 const req = require("express/lib/request");
 const { sendDueList } = require("../../helpers/sendmail");
 const { logger } = require("../../helpers/logger");
+const { formatDate } = require("../../helpers/utils");
 
 materialReceiptRegisterRouter.get(
   "/getByTypeMaterialReceiptRegister",
@@ -17,6 +18,25 @@ materialReceiptRegisterRouter.get(
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+materialReceiptRegisterRouter.get(
+  "/getByTypeMaterialReceiptRegisterByRvID",
+  async (req, res, next) => {
+    try {
+      let id = req.query.id;
+      // console.log(`SELECT * FROM material_receipt_register where RvID = ${id}`);
+      misQueryMod(
+        `SELECT * FROM material_receipt_register where RvID = ${id} order by RvID`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data[0]);
         }
       );
     } catch (error) {
@@ -42,8 +62,10 @@ materialReceiptRegisterRouter.post(
         type,
       } = req.body;
       //convert date dd/mm/yyyy to yyyy-mm-dd
-      receiptDate = receiptDate.split("/").reverse().join("-");
-      rvDate = receiptDate.split("/").reverse().join("-");
+      //receiptDate = receiptDate.split("/").reverse().join("-");
+      receiptDate = formatDate(new Date(), 5);
+      rvDate = rvDate.split("/").reverse().join("-");
+      //res.send(req.body);
       misQueryMod(
         `insert into  material_receipt_register (ReceiptDate,RV_No,RV_Date,Cust_Code,Customer,CustDocuNo,RVStatus,TotalWeight,TotalCalculatedWeight,Type) values ("${receiptDate}","${rvNo}","${rvDate}","${customer}","${customerName}","${reference}","${status}","${weight}","${calcWeight}","${type}")`,
         (err, data) => {
@@ -62,6 +84,7 @@ materialReceiptRegisterRouter.post(
   async (req, res, next) => {
     try {
       let {
+        rvId,
         receiptDate,
         rvNo,
         rvDate,
@@ -73,14 +96,44 @@ materialReceiptRegisterRouter.post(
         calcWeight,
         type,
       } = req.body;
+      //res.send(req.body);
       //convert date dd/mm/yyyy to yyyy-mm-dd
-      receiptDate = receiptDate.split("/").reverse().join("-");
-      rvDate = receiptDate.split("/").reverse().join("-");
+      receiptDate = formatDate(new Date(), 5);
+      rvDate = rvDate.split("/").reverse().join("-");
+      /*console.log(
+        `update material_receipt_register set ReceiptDate = "${receiptDate}",RV_No="${rvNo}",RV_Date="${rvDate}",Cust_Code="${customer}",Customer="${customerName}",CustDocuNo="${reference}",RVStatus="${status}",TotalWeight="${weight}",TotalCalculatedWeight="${calcWeight}" where  RvID = ${rvId}`
+      );*/
       misQueryMod(
         `update material_receipt_register set ReceiptDate = "${receiptDate}",RV_No="${rvNo}",RV_Date="${rvDate}",Cust_Code="${customer}",Customer="${customerName}",CustDocuNo="${reference}",RVStatus="${status}",TotalWeight="${weight}",TotalCalculatedWeight="${calcWeight}" where  RvID = ${rvId}`,
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+materialReceiptRegisterRouter.post(
+  "/deleteHeaderMaterialReceiptRegisterAndDetails",
+  async (req, res, next) => {
+    try {
+      let { rvId } = req.body;
+      misQueryMod(
+        `delete from mtrl_part_receipt_details  where  RvID = ${rvId}`,
+        (err, data) => {
+          if (err) logger.error(err);
+
+          misQueryMod(
+            `delete from material_receipt_register  where  RvID = ${rvId}`,
+            (err, data) => {
+              if (err) logger.error(err);
+              res.send(data);
+            }
+          );
+          //res.send(data);
         }
       );
     } catch (error) {

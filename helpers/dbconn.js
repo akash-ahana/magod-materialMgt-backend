@@ -7,12 +7,12 @@ var misConn = mysql.createConnection({
   database: "magodmis",
 });
 
-/*var setupConn = mysql.createConnection({
+var setupConn = mysql.createConnection({
   host: "localhost",
   user: "Nilesh",
   password: "1234",
   database: "magod_setup",
-});*/
+});
 
 var qtnConn = mysql.createConnection({
   host: "localhost",
