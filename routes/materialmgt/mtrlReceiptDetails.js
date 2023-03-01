@@ -1,0 +1,95 @@
+const mtrlReceiptDetailsRouter = require("express").Router();
+const { misQueryMod } = require("../../helpers/dbconn");
+const req = require("express/lib/request");
+const { logger } = require("../../helpers/logger");
+
+mtrlReceiptDetailsRouter.post(
+  "/insertMtrlReceiptDetails",
+  async (req, res, next) => {
+    try {
+      let {
+        rvId,
+        srl,
+        custCode,
+        mtrlCode,
+        material,
+        shapeMtrlId,
+        shapeID,
+        dynamicPara1,
+        dynamicPara2,
+        dynamicPara3,
+        qty,
+        inspected,
+        accepted,
+        totalWeightCalculated,
+        totalWeight,
+        locationNo,
+        upDated,
+        qtyAccepted,
+        qtyReceived,
+        qtyRejected,
+        qtyUsed,
+        qtyReturned,
+      } = req.body;
+      /*console.log(
+        `insert into  mtrlreceiptdetails (RvID,Srl,Cust_Code,Mtrl_Code,Material,ShapeMtrlID,ShapeID,DynamicPara1,DynamicPara2,DynamicPara3,Qty,Inspected,Accepted,TotalWeightCalculated,TotalWeight,LocationNo,Updated,QtyReceived,QtyRejected,QtyAccepted,QtyUsed,QtyReturned) values ("${rvId}","${srl}","${custCode}","${mtrlCode}","${material}",${shapeMtrlId},${shapeID},${dynamicPara1},${dynamicPara2},${dynamicPara3},${qty},${inspected},${accepted},${totalWeightCalculated},${totalWeight},"${locationNo}",${upDated},${qtyReceived},"${qtyRejected}","${qtyAccepted}","${qtyUsed}","${qtyReturned}")`
+      );*/
+      misQueryMod(
+        `insert into  mtrlreceiptdetails (RvID,Srl,Cust_Code,Mtrl_Code,Material,ShapeMtrlID,ShapeID,DynamicPara1,DynamicPara2,DynamicPara3,Qty,Inspected,Accepted,TotalWeightCalculated,TotalWeight,LocationNo,Updated,QtyReceived,QtyRejected,QtyAccepted,QtyUsed,QtyReturned) values ("${rvId}","${srl}","${custCode}","${mtrlCode}","${material}",${shapeMtrlId},${shapeID},${dynamicPara1},${dynamicPara2},${dynamicPara3},${qty},${inspected},${accepted},${totalWeightCalculated},${totalWeight},"${locationNo}",${upDated},${qtyReceived},"${qtyRejected}","${qtyAccepted}","${qtyUsed}","${qtyReturned}")`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+mtrlReceiptDetailsRouter.post(
+  "/updateMtrlReceiptDetails",
+  async (req, res, next) => {
+    try {
+      let {
+        id,
+        rvId,
+        srl,
+        custCode,
+        mtrlCode,
+        material,
+        shapeMtrlId,
+        shapeID,
+        dynamicPara1,
+        dynamicPara2,
+        dynamicPara3,
+        qty,
+        inspected,
+        accepted,
+        totalWeightCalculated,
+        totalWeight,
+        locationNo,
+        upDated,
+        qtyAccepted,
+        qtyReceived,
+        qtyRejected,
+        qtyUsed,
+        qtyReturned,
+      } = req.body;
+      console.log(
+        `update mtrlreceiptdetails set RvID = "${rvId}", Srl = "${srl}",Cust_Code = "${custCode}",Mtrl_Code = "${mtrlCode}",Material = "${material}",ShapeMtrlID = ${shapeMtrlId},ShapeID = ${shapeID},DynamicPara1 = ${dynamicPara1},DynamicPara2 = ${dynamicPara2},DynamicPara3 = ${dynamicPara3},Qty = ${qty},Inspected = ${inspected},Accepted = ${accepted}, TotalWeightCalculated = ${totalWeightCalculated},TotalWeight = ${totalWeight},LocationNo = "${locationNo}",Updated = ${upDated}, QtyAccepted = ${qtyAccepted},QtyReceived = "${qtyReceived}",QtyRejected = "${qtyRejected}",QtyUsed = "${qtyUsed}",QtyReturned = "${qtyReturned}" where Mtrl_Rv_id = ${id}`
+      );
+      misQueryMod(
+        `update mtrlreceiptdetails set RvID = "${rvId}", Srl = "${srl}",Cust_Code = "${custCode}",Mtrl_Code = "${mtrlCode}",Material = "${material}",ShapeMtrlID = ${shapeMtrlId},ShapeID = ${shapeID},DynamicPara1 = ${dynamicPara1},DynamicPara2 = ${dynamicPara2},DynamicPara3 = ${dynamicPara3},Qty = ${qty},Inspected = ${inspected},Accepted = ${accepted}, TotalWeightCalculated = ${totalWeightCalculated},TotalWeight = ${totalWeight},LocationNo = "${locationNo}",Updated = ${upDated}, QtyAccepted = ${qtyAccepted},QtyReceived = "${qtyReceived}",QtyRejected = "${qtyRejected}",QtyUsed = "${qtyUsed}",QtyReturned = "${qtyReturned}" where Mtrl_Rv_id = ${id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+module.exports = mtrlReceiptDetailsRouter;
