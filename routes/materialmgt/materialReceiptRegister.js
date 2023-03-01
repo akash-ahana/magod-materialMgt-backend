@@ -13,13 +13,24 @@ materialReceiptRegisterRouter.get(
     try {
       let type1 = req.query.type1;
       let type2 = req.query.type2;
-      misQueryMod(
-        `SELECT * FROM material_receipt_register where RVStatus = '${type1}' and Type = '${type2}' order by RV_Date DESC`,
-        (err, data) => {
-          if (err) logger.error(err);
-          res.send(data);
-        }
-      );
+      if (req.query.type3) {
+        //purchase section
+        misQueryMod(
+          `SELECT * FROM material_receipt_register where RVStatus = '${type1}' and Type = '${type2}' and Cust_Code = 0 order by RV_Date DESC`,
+          (err, data) => {
+            if (err) logger.error(err);
+            res.send(data);
+          }
+        );
+      } else {
+        misQueryMod(
+          `SELECT * FROM material_receipt_register where RVStatus = '${type1}' and Type = '${type2}' order by RV_Date DESC`,
+          (err, data) => {
+            if (err) logger.error(err);
+            res.send(data);
+          }
+        );
+      }
     } catch (error) {
       next(error);
     }

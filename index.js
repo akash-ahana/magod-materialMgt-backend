@@ -24,6 +24,14 @@ app.use("/customers", customerRouter);
 const custBomListRouter = require("./routes/materialmgt/custBomList");
 app.use("/custbomlist", custBomListRouter);
 
+//material location list
+const materialLocationListRouter = require("./routes/materialmgt/materialLocationList");
+app.use("/materiallocationlist", materialLocationListRouter);
+
+//mtrl data
+const mtrlDataRouter = require("./routes/materialmgt/mtrlData");
+app.use("/mtrlData", mtrlDataRouter);
+
 //material receipt voucher
 const materialReceiptRegisterRouter = require("./routes/materialmgt/materialReceiptRegister");
 app.use("/materialReceiptRegister", materialReceiptRegisterRouter);
@@ -31,6 +39,10 @@ app.use("/materialReceiptRegister", materialReceiptRegisterRouter);
 //material part receipt details
 const mtrlPartReceiptDetailsRouter = require("./routes/materialmgt/mtrlPartReceiptDetails");
 app.use("/mtrlPartReceiptDetails", mtrlPartReceiptDetailsRouter);
+
+//material receipt details
+const mtrlReceiptDetailsRouter = require("./routes/materialmgt/mtrlReceiptDetails");
+app.use("/mtrlReceiptDetails", mtrlReceiptDetailsRouter);
 
 //running No
 const runningNoRouter = require("./routes/materialmgt/runningNo");
