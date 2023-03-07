@@ -5,12 +5,14 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { logger } = require("./helpers/logger");
+const compression = require("compression");
 const app = express();
 
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+app.use(compression());
 
 app.get("/", (req, res) => {
   res.send("hello");
@@ -31,6 +33,10 @@ app.use("/materiallocationlist", materialLocationListRouter);
 //mtrl data
 const mtrlDataRouter = require("./routes/materialmgt/mtrlData");
 app.use("/mtrlData", mtrlDataRouter);
+
+//shape data
+const shapeRouter = require("./routes/materialmgt/shapes");
+app.use("/shapes", shapeRouter);
 
 //material receipt voucher
 const materialReceiptRegisterRouter = require("./routes/materialmgt/materialReceiptRegister");

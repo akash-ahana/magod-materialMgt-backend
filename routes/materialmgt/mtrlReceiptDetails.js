@@ -3,6 +3,25 @@ const { misQueryMod } = require("../../helpers/dbconn");
 const req = require("express/lib/request");
 const { logger } = require("../../helpers/logger");
 
+mtrlReceiptDetailsRouter.get(
+  "/getMtrlReceiptDetailsByRvID",
+  async (req, res, next) => {
+    try {
+      let id = req.query.id;
+      //console.log(`SELECT * FROM mtrl_part_receipt_details where RvID = ${id}`);
+      misQueryMod(
+        `SELECT * FROM mtrlreceiptdetails where RvID = ${id} order by RvID`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 mtrlReceiptDetailsRouter.post(
   "/insertMtrlReceiptDetails",
   async (req, res, next) => {
@@ -76,9 +95,10 @@ mtrlReceiptDetailsRouter.post(
         qtyUsed,
         qtyReturned,
       } = req.body;
-      console.log(
+      inspected = inspected == "on" ? "1" : "0";
+      /*console.log(
         `update mtrlreceiptdetails set RvID = "${rvId}", Srl = "${srl}",Cust_Code = "${custCode}",Mtrl_Code = "${mtrlCode}",Material = "${material}",ShapeMtrlID = ${shapeMtrlId},ShapeID = ${shapeID},DynamicPara1 = ${dynamicPara1},DynamicPara2 = ${dynamicPara2},DynamicPara3 = ${dynamicPara3},Qty = ${qty},Inspected = ${inspected},Accepted = ${accepted}, TotalWeightCalculated = ${totalWeightCalculated},TotalWeight = ${totalWeight},LocationNo = "${locationNo}",Updated = ${upDated}, QtyAccepted = ${qtyAccepted},QtyReceived = "${qtyReceived}",QtyRejected = "${qtyRejected}",QtyUsed = "${qtyUsed}",QtyReturned = "${qtyReturned}" where Mtrl_Rv_id = ${id}`
-      );
+      );*/
       misQueryMod(
         `update mtrlreceiptdetails set RvID = "${rvId}", Srl = "${srl}",Cust_Code = "${custCode}",Mtrl_Code = "${mtrlCode}",Material = "${material}",ShapeMtrlID = ${shapeMtrlId},ShapeID = ${shapeID},DynamicPara1 = ${dynamicPara1},DynamicPara2 = ${dynamicPara2},DynamicPara3 = ${dynamicPara3},Qty = ${qty},Inspected = ${inspected},Accepted = ${accepted}, TotalWeightCalculated = ${totalWeightCalculated},TotalWeight = ${totalWeight},LocationNo = "${locationNo}",Updated = ${upDated}, QtyAccepted = ${qtyAccepted},QtyReceived = "${qtyReceived}",QtyRejected = "${qtyRejected}",QtyUsed = "${qtyUsed}",QtyReturned = "${qtyReturned}" where Mtrl_Rv_id = ${id}`,
         (err, data) => {
