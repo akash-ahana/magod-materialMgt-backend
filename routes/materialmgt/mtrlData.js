@@ -1,9 +1,6 @@
 const mtrlDataRouter = require("express").Router();
-var createError = require("http-errors");
-const { createFolder, copyallfiles } = require("../../helpers/folderhelper");
-const { misQuery, setupQuery, misQueryMod } = require("../../helpers/dbconn");
+const { misQueryMod } = require("../../helpers/dbconn");
 const req = require("express/lib/request");
-const { sendDueList } = require("../../helpers/sendmail");
 const { logger } = require("../../helpers/logger");
 
 mtrlDataRouter.get("/allmtrldata", async (req, res, next) => {
@@ -19,4 +16,23 @@ mtrlDataRouter.get("/allmtrldata", async (req, res, next) => {
     next(error);
   }
 });
+
+mtrlDataRouter.get("/getRowByMtrlCode", async (req, res, next) => {
+  try {
+    let code = req.query.code;
+    /*console.log(
+      `Select * from magodmis.mtrl_data where Mtrl_Code =  "${code}"`
+    );*/
+    misQueryMod(
+      `Select * from magodmis.mtrl_data where Mtrl_Code =  "${code}"`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data[0]);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mtrlDataRouter;
