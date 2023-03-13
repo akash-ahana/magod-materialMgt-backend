@@ -50,6 +50,10 @@ app.use("/mtrlPartReceiptDetails", mtrlPartReceiptDetailsRouter);
 const mtrlReceiptDetailsRouter = require("./routes/materialmgt/mtrlReceiptDetails");
 app.use("/mtrlReceiptDetails", mtrlReceiptDetailsRouter);
 
+//material stock list
+const mtrlStockListRouter = require("./routes/materialmgt/mtrlstocklist");
+app.use("/mtrlStockList", mtrlStockListRouter);
+
 //running No
 const runningNoRouter = require("./routes/materialmgt/runningNo");
 app.use("/runningNo", runningNoRouter);
