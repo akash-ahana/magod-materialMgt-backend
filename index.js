@@ -58,6 +58,10 @@ app.use("/mtrlStockList", mtrlStockListRouter);
 const runningNoRouter = require("./routes/materialmgt/runningNo");
 app.use("/runningNo", runningNoRouter);
 
+//running No
+const returnRouter = require("./routes/materialmgt/return");
+app.use("/return", returnRouter);
+
 /*app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send({
