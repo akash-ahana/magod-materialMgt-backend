@@ -112,4 +112,23 @@ mtrlReceiptDetailsRouter.post(
   }
 );
 
+mtrlReceiptDetailsRouter.post(
+  "/deleteMtrlReceiptDetails",
+  async (req, res, next) => {
+    try {
+      let { id } = req.body;
+      //console.log(`delete from mtrl_part_receipt_details where id = ${id}`);
+      misQueryMod(
+        `delete from mtrlreceiptdetails where Mtrl_Rv_id = ${id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = mtrlReceiptDetailsRouter;
