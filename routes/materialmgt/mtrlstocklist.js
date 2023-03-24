@@ -96,4 +96,37 @@ mtrlStockListRouter.post("/deleteMtrlStockByRVNo", async (req, res, next) => {
   }
 });
 
+mtrlStockListRouter.post("/deleteMtrlStockByIVNo", async (req, res, next) => {
+  try {
+    let { IV_No } = req.body;
+    misQueryMod(
+      `delete from magodmis.mtrlstocklist where IV_No =  "${IV_No}"`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+mtrlStockListRouter.post("/updateIssueIVNo", async (req, res, next) => {
+  try {
+    let { Issue, Iv_No, MtrlStockID } = req.body;
+    console.log(
+      `update magodmis.mtrlstocklist set Issue="${Issue}", Iv_No = "${Iv_No}" where MtrlStockID =  "${MtrlStockID}"`
+    );
+    misQueryMod(
+      `update magodmis.mtrlstocklist set Issue="${Issue}", Iv_No = "${Iv_No}" where MtrlStockID =  "${MtrlStockID}"`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mtrlStockListRouter;

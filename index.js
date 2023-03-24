@@ -58,9 +58,21 @@ app.use("/mtrlStockList", mtrlStockListRouter);
 const runningNoRouter = require("./routes/materialmgt/runningNo");
 app.use("/runningNo", runningNoRouter);
 
-//running No
+//return section
 const returnRouter = require("./routes/materialmgt/return");
 app.use("/return", returnRouter);
+
+//PendingDispatch
+const materialIssueRegisterRouter = require("./routes/materialmgt/materialIssueRegister");
+app.use("/materialIssueRegister", materialIssueRegisterRouter);
+
+//OutwordMaterialIssueVocher
+const mtrlIssueDetailsRouter = require("./routes/materialmgt/mtrlIssueDetails");
+app.use("/mtrlIssueDetails", mtrlIssueDetailsRouter);
+
+//material stock list
+const materialReturnDetailsRouter = require("./routes/materialmgt/materialReturnDetails");
+app.use("/materialReturnDetails", materialReturnDetailsRouter);
 
 /*app.use((err, req, res, next) => {
   res.status(err.status || 500);
