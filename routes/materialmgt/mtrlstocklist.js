@@ -114,11 +114,65 @@ mtrlStockListRouter.post("/deleteMtrlStockByIVNo", async (req, res, next) => {
 mtrlStockListRouter.post("/updateIssueIVNo", async (req, res, next) => {
   try {
     let { Issue, Iv_No, MtrlStockID } = req.body;
-    console.log(
-      `update magodmis.mtrlstocklist set Issue="${Issue}", Iv_No = "${Iv_No}" where MtrlStockID =  "${MtrlStockID}"`
-    );
+    // console.log(
+    //   `update magodmis.mtrlstocklist set Issue="${Issue}", Iv_No = "${Iv_No}" where MtrlStockID =  "${MtrlStockID}"`
+    // );
     misQueryMod(
       `update magodmis.mtrlstocklist set Issue="${Issue}", Iv_No = "${Iv_No}" where MtrlStockID =  "${MtrlStockID}"`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+mtrlStockListRouter.post("/updateIVNoNULL", async (req, res, next) => {
+  try {
+    let { IV_No } = req.body;
+
+    misQueryMod(
+      `update magodmis.mtrlstocklist set Iv_No= null where Iv_No = "${IV_No}"`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+mtrlStockListRouter.post("/insertByReturnDetails", async (req, res, next) => {
+  try {
+    let { Iv_Id, IV_No } = req.body;
+    /*console.log(
+      `INSERT INTO  mtrlstocklist(MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No, Mtrl_Code, Shape, Material, DynamicPara1,
+      DynamicPara2, DynamicPara3, DynamicPara4, Locked, Scrap, Issue, Weight,ScrapWeight,  NCProgramNo, LocationNo) 
+      SELECT MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No,Mtrl_Code, Shape, Material, DynamicPara1, DynamicPara2, DynamicPara3,
+      DynamicPara4, Locked, Scrap, Issue, Weight, ScrapWeight,  NCProgramNo, LocationNo FROM materialreturneddetails WHERE IV_No = '${IV_No}'`
+    );*/
+    misQueryMod(
+      `INSERT INTO  mtrlstocklist(MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No, Mtrl_Code, Shape, Material, DynamicPara1,
+        DynamicPara2, DynamicPara3, DynamicPara4, Locked, Scrap, Issue, Weight,ScrapWeight,  NCProgramNo, LocationNo) 
+        SELECT MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No,Mtrl_Code, Shape, Material, DynamicPara1, DynamicPara2, DynamicPara3,
+        DynamicPara4, Locked, Scrap, Issue, Weight, ScrapWeight,  NCProgramNo, LocationNo FROM materialreturneddetails WHERE IV_No = '${IV_No}'`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+mtrlStockListRouter.get("/getCustomerDetails", async (req, res, next) => {
+  try {
+    await misQueryMod(
+      "SELECT Customer,Cust_Code FROM magodmis.mtrlstocklist group by Customer,Cust_Code order by Cust_Code not like 0000 ",
       (err, data) => {
         if (err) logger.error(err);
         res.send(data);

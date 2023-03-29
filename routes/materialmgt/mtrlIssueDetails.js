@@ -44,11 +44,12 @@ mtrlIssueDetailsRouter.post("/insert", async (req, res, next) => {
 });
 
 mtrlIssueDetailsRouter.get(
-  "/allmtrlIssueDetailsRouter",
+  "/getmtrlIssueDetailsByIVID",
   async (req, res, next) => {
+    let id = req.query.id;
     try {
       await misQueryMod(
-        "Select Srl,MtrlDescription,Material,Qty,TotalWeightCalculated,TotalWeight from magodmis.`mtrlissuedetails` where cust_code not like 0000 order by IV_Id desc limit 20",
+        `Select * from magodmis.mtrlissuedetails where IV_Id = ${id}`,
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);
@@ -60,25 +61,4 @@ mtrlIssueDetailsRouter.get(
   }
 );
 
-mtrlIssueDetailsRouter.post(
-  "/updatemtrlIssueDetailsRouter",
-  async (req, res, next) => {
-    try {
-      let { IvId, PkngDcNo, TotalWeight } = req.body;
-
-      await misQueryMod(
-        `update magodmis.material_issue_register set PkngDcNo="${PkngDcNo}",TotalWeight="${TotalWeight}" where Iv_No="${IvId}"`,
-        (err, data) => {
-          if (err) {
-            logger.error(err);
-            res.send(err);
-          }
-          res.send(data);
-        }
-      );
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 module.exports = mtrlIssueDetailsRouter;
