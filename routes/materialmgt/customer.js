@@ -19,4 +19,20 @@ customerRouter.get("/allcustomers", async (req, res, next) => {
     next(error);
   }
 });
+
+customerRouter.get("/getCustomerByCustCode", async (req, res, next) => {
+  let code = req.query.code;
+  try {
+    misQueryMod(
+      `Select * from magodmis.cust_data where Cust_Code = ${code}`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data[0]);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = customerRouter;

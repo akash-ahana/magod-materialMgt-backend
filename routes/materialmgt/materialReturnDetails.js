@@ -18,4 +18,20 @@ materialReturnDetailsRouter.post("/insert", async (req, res, next) => {
   }
 });
 
+materialReturnDetailsRouter.post("/deleteByIVNO", async (req, res, next) => {
+  try {
+    let { IV_NO } = req.body;
+
+    misQueryMod(
+      `DELETE FROM magodmis.materialreturneddetails where IV_NO ="${IV_NO}"`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = materialReturnDetailsRouter;

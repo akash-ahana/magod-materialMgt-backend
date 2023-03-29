@@ -74,6 +74,22 @@ app.use("/mtrlIssueDetails", mtrlIssueDetailsRouter);
 const materialReturnDetailsRouter = require("./routes/materialmgt/materialReturnDetails");
 app.use("/materialReturnDetails", materialReturnDetailsRouter);
 
+//customstocklist
+const customStockList = require("./routes/materialmgt/customStocklist");
+app.use("/customstocklist", customStockList);
+
+//dcRegister
+const dcRegisterRouter = require("./routes/materialmgt/dcregister");
+app.use("/dcregister", dcRegisterRouter);
+
+//dc details
+const dcDetailsRouter = require("./routes/materialmgt/dcdetails");
+app.use("/dcdetails", dcDetailsRouter);
+
+//dc details
+const mtrlPartIssueDetailsRouter = require("./routes/materialmgt/mtrlPartIssueDetails");
+app.use("/mtrlPartIssueDetails", mtrlPartIssueDetailsRouter);
+
 /*app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send({
