@@ -38,9 +38,9 @@ mtrlPartReceiptDetailsRouter.post(
         qtyAccepted,
         qtyIssued,
       } = req.body;
-      console.log(
-        `insert into  mtrl_part_receipt_details (RVID,CustBOM_Id,UnitWt,QtyReceived,QtyRejected,QtyUsed,QtyReturned,PartId,QtyAccepted,QtyIssued) values ("${rvId}","${custBomId}",${unitWeight},"${qtyReceived}","${qtyRejected}","${qtyUsed}","${qtyReturned}","${partId}","${qtyAccepted}","${qtyIssued}")`
-      );
+      // console.log(
+      //   `insert into  mtrl_part_receipt_details (RVID,CustBOM_Id,UnitWt,QtyReceived,QtyRejected,QtyUsed,QtyReturned,PartId,QtyAccepted,QtyIssued) values ("${rvId}","${custBomId}",${unitWeight},"${qtyReceived}","${qtyRejected}","${qtyUsed}","${qtyReturned}","${partId}","${qtyAccepted}","${qtyIssued}")`
+      // );
       misQueryMod(
         `insert into  mtrl_part_receipt_details (RVID,CustBOM_Id,UnitWt,QtyReceived,QtyRejected,QtyUsed,QtyReturned,PartId,QtyAccepted,QtyIssued) values ("${rvId}","${custBomId}","${unitWeight}","${qtyReceived}","${qtyRejected}","${qtyUsed}","${qtyReturned}","${partId}","${qtyAccepted}","${qtyIssued}")`,
         (err, data) => {
@@ -116,6 +116,26 @@ mtrlPartReceiptDetailsRouter.post(
       );*/
       misQueryMod(
         `UPDATE magodmis.mtrl_part_receipt_details m SET m.QtyReturned=m.QtyReturned-${QtyReturned} WHERE m.Id=${Id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+mtrlPartReceiptDetailsRouter.post(
+  "/updateQtyReturnedPartReceiptDetails1",
+  async (req, res, next) => {
+    try {
+      let { Id, QtyReturned } = req.body;
+      /*console.log(
+      );*/
+      misQueryMod(
+        `UPDATE magodmis.mtrl_part_receipt_details m SET m.QtyReturned=m.QtyReturned+${QtyReturned} WHERE m.Id=${Id}`,
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);

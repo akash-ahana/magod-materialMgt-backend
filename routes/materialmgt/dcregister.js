@@ -40,4 +40,19 @@ dcRegisterRouter.post("/insert", async (req, res, next) => {
   }
 });
 
+dcRegisterRouter.get("/getDCRegisterByID", async (req, res, next) => {
+  let id = req.query.id;
+  try {
+    misQueryMod(
+      `Select * from magodmis.dc_register where DC_Id = ${id}`,
+      (err, data) => {
+        if (err) logger.error(err);
+        data.length != 0 ? res.send(data[0]) : res.send([]);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = dcRegisterRouter;
