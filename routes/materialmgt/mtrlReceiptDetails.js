@@ -4,6 +4,25 @@ const req = require("express/lib/request");
 const { logger } = require("../../helpers/logger");
 
 mtrlReceiptDetailsRouter.get(
+  "/getMtrlReceiptDetailsByID",
+  async (req, res, next) => {
+    try {
+      let id = req.query.id;
+      //console.log(`SELECT * FROM mtrl_part_receipt_details where RvID = ${id}`);
+      misQueryMod(
+        `SELECT * FROM mtrlreceiptdetails where Mtrl_Rv_id = ${id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+mtrlReceiptDetailsRouter.get(
   "/getMtrlReceiptDetailsByRvID",
   async (req, res, next) => {
     try {
