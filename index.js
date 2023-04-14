@@ -90,6 +90,26 @@ app.use("/dcdetails", dcDetailsRouter);
 const mtrlPartIssueDetailsRouter = require("./routes/materialmgt/mtrlPartIssueDetails");
 app.use("/mtrlPartIssueDetails", mtrlPartIssueDetailsRouter);
 
+//shop floor issue
+const shopFloorIssueRouter = require("./routes/materialmgt/shopFloorIssue");
+app.use("/shopFloorIssue", shopFloorIssueRouter);
+
+//shopfloorAllotment
+const shopFloorAllotmentRouter = require("./routes/materialmgt/shopfloorAllotment");
+app.use("/shopfloorAllotment", shopFloorAllotmentRouter);
+
+//shop floor bom issue details
+const shopfloorBOMIssueDetailsRouter = require("./routes/materialmgt/shopfloorBOMIssueDetails");
+app.use("/shopfloorBOMIssueDetails", shopfloorBOMIssueDetailsRouter);
+
+//ncprogramsRouter
+const ncprogramsRouter = require("./routes/materialmgt/ncprograms");
+app.use("/ncprograms", ncprogramsRouter);
+
+//shopfloorPartIssueRegisterRouter
+const shopfloorPartIssueRegisterRouter = require("./routes/materialmgt/shopfloorPartIssueRegister");
+app.use("/shopfloorPartIssueRegister", shopfloorPartIssueRegisterRouter);
+
 /*app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send({
