@@ -111,9 +111,6 @@ mtrlPartReceiptDetailsRouter.post(
   async (req, res, next) => {
     try {
       let { Id, QtyReturned } = req.body;
-      /*console.log(
-        `update mtrl_part_receipt_details set RVId = "${rvId}", CustBOM_Id = "${custBomId}", UnitWt = "${unitWeight}", QtyReceived = "${qtyReceived}", QtyRejected = "${qtyRejected}", QtyUsed = "${qtyUsed}", QtyReturned = "${qtyReturned}", PartId = "${partId}",QtyAccepted = "${qtyAccepted}", QtyIssued = "${qtyIssued}" where id = "${id}"`
-      );*/
       misQueryMod(
         `UPDATE magodmis.mtrl_part_receipt_details m SET m.QtyReturned=m.QtyReturned-${QtyReturned} WHERE m.Id=${Id}`,
         (err, data) => {
@@ -136,6 +133,24 @@ mtrlPartReceiptDetailsRouter.post(
       );*/
       misQueryMod(
         `UPDATE magodmis.mtrl_part_receipt_details m SET m.QtyReturned=m.QtyReturned+${QtyReturned} WHERE m.Id=${Id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+mtrlPartReceiptDetailsRouter.post(
+  "/updateQtyIssuedPartReceiptDetails",
+  async (req, res, next) => {
+    try {
+      let { Id, Qty } = req.body;
+      misQueryMod(
+        `UPDATE magodmis.mtrl_part_receipt_details m SET m.QtyIssued=m.QtyIssued-${Qty} WHERE m.Id=${Id}`,
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);
