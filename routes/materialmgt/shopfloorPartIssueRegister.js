@@ -21,4 +21,32 @@ shopfloorPartIssueRegisterRouter.post(
   }
 );
 
+shopfloorPartIssueRegisterRouter.post(
+  "/insertShopfloorPartIssueRegister",
+  async (req, res, next) => {
+    try {
+      let {
+        IV_No,
+        Issue_date,
+        NC_ProgramNo,
+        QtyIssued,
+        QtyReturned,
+        QtyUsed,
+        Ncid,
+      } = req.body;
+      misQueryMod(
+        `INSERT INTO magodmis.\`shopfloor_part _issueregister\`
+                (IV_No, Issue_date, NC_ProgramNo, QtyIssued,QtyReturned,QtyUsed,Ncid) Values
+                (${IV_No}, "${Issue_date}", ${NC_ProgramNo}, ${QtyIssued},${QtyReturned},${QtyUsed},${Ncid})`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = shopfloorPartIssueRegisterRouter;
