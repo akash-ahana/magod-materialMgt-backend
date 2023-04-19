@@ -59,7 +59,7 @@ shopFloorAllotmentRouter.get(
         `SELECT m.*, m1.RV_No, m1.RV_Date 
         FROM magodmis.mtrl_part_receipt_details m,magodmis.material_receipt_register m1 
         WHERE m.CustBOM_Id in (${bomids}) AND m1.RvID=m.RVId AND m1.RVStatus='Received'
-        AND m.QtyAccepted >  m.QtyIssued + m.QtyReturned order by CustBOM_Id`,
+        AND m.QtyAccepted >  m.QtyIssued + m.QtyReturned order by CustBOM_Id, m1.RV_Date `,
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);

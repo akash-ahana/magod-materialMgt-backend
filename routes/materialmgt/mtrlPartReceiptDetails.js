@@ -162,4 +162,42 @@ mtrlPartReceiptDetailsRouter.post(
   }
 );
 
+mtrlPartReceiptDetailsRouter.post(
+  "/updateQtyIssuedPartReceiptDetails1",
+  async (req, res, next) => {
+    try {
+      let { Id, Qty } = req.body;
+      misQueryMod(
+        `UPDATE magodmis.mtrl_part_receipt_details m SET m.QtyIssued=m.QtyIssued+${Qty} WHERE m.Id=${Id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+mtrlPartReceiptDetailsRouter.post(
+  "/updateQtyIssuedPartReceiptDetails2",
+  async (req, res, next) => {
+    try {
+      let { Id, Qty } = req.body;
+      misQueryMod(
+        `UPDATE magodmis.mtrl_part_receipt_details m SET m.QtyIssued= 
+        CASE WHEN m.QtyIssued<= m.QtyIssued+${Qty} THEN m.QtyIssued+${Qty}
+        ELSE m.QtyIssued END WHERE m.Id=${Id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = mtrlPartReceiptDetailsRouter;

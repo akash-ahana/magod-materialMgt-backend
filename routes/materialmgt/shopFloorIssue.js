@@ -76,7 +76,7 @@ shopFloorIssueRouter.get(
         `SELECT s.*, c.Cust_Name, n.TaskNo, n.NcId, n.Machine, n.Operation,
         n.Mtrl_Code, n.CustMtrl, n.Cust_Code
     FROM magodmis.\`shopfloor_material _issueregister\` s,magodmis.cust_data c,magodmis.ncprograms n 
-                    WHERE  s.Status="${status}" AND  n.Cust_Code= c.Cust_Code AND s.NcId=n.Ncid order by Issue_date limit 20`,
+                    WHERE  s.Status="${status}" AND  n.Cust_Code= c.Cust_Code AND s.NcId=n.Ncid order by Issue_date DESC limit 100`,
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);
