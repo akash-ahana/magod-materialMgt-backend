@@ -36,6 +36,24 @@ ncprogramsRouter.post(
   }
 );
 
+ncprogramsRouter.post(
+  "/updateQtyAllotedncprograms2",
+  async (req, res, next) => {
+    try {
+      let { Id, Qty } = req.body;
+      misQueryMod(
+        `UPDATE magodmis.ncprograms n SET n.QtyAllotted=n.QtyAllotted+${Qty}, n.PStatus='Cutting' WHERE n.Ncid= ${Id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 ncprogramsRouter.get("/getRowByNCID", async (req, res, next) => {
   try {
     let id = req.query.id;
