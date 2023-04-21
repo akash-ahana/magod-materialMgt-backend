@@ -1,9 +1,9 @@
-const shopfloorMaterialIssueRegister = require("express").Router();
+const shopfloorMaterialIssueRegisterRouter = require("express").Router();
 const { misQueryMod } = require("../../helpers/dbconn");
 const req = require("express/lib/request");
 const { logger } = require("../../helpers/logger");
 
-shopfloorMaterialIssueRegister.post(
+shopfloorMaterialIssueRegisterRouter.post(
   "/insertShopfloorMaterialIssueRegister",
   async (req, res, next) => {
     try {
@@ -24,4 +24,4 @@ shopfloorMaterialIssueRegister.post(
   }
 );
 
-module.exports = shopfloorMaterialIssueRegister;
+module.exports = shopfloorMaterialIssueRegisterRouter;

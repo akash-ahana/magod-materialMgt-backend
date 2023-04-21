@@ -145,6 +145,21 @@ mtrlStockListRouter.post("/updateIVNoNULL", async (req, res, next) => {
   }
 });
 
+mtrlStockListRouter.post("/updateMtrlStockLock", async (req, res, next) => {
+  try {
+    let { id } = req.body;
+    misQueryMod(
+      `UPDATE magodmis.mtrlstocklist SET Locked=1 WHERE MtrlStockID='${id}'`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 mtrlStockListRouter.post("/insertByReturnDetails", async (req, res, next) => {
   try {
     let { Iv_Id, IV_No } = req.body;

@@ -110,9 +110,20 @@ app.use("/ncprograms", ncprogramsRouter);
 const shopfloorPartIssueRegisterRouter = require("./routes/materialmgt/shopfloorPartIssueRegister");
 app.use("/shopfloorPartIssueRegister", shopfloorPartIssueRegisterRouter);
 
-//shopfloorPartIssueRegisterRouter
+//shopfloorUnitIssueRegisterRouter
 const shopfloorUnitIssueRegisterRouter = require("./routes/materialmgt/shopfloorUnitIssueRegister");
 app.use("/shopfloorUnitIssueRegister", shopfloorUnitIssueRegisterRouter);
+
+//shopfloorMaterialIssueRegister
+const shopfloorMaterialIssueRegisterRouter = require("./routes/materialmgt/shopfloorMaterialIssueRegister");
+app.use(
+  "/shopfloorMaterialIssueRegister",
+  shopfloorMaterialIssueRegisterRouter
+);
+
+//ncprogrammtrlallotmentlist
+const ncprogrammtrlallotmentlistRouter = require("./routes/materialmgt/ncprogrammtrlallotmentlist");
+app.use("/ncprogrammtrlallotmentlist", ncprogrammtrlallotmentlistRouter);
 
 /*app.use((err, req, res, next) => {
   res.status(err.status || 500);
