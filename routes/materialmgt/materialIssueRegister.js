@@ -115,7 +115,7 @@ materialIssueRegisterRouter.get(
     if (type === "customer") {
       try {
         await misQueryMod(
-          "select * from material_issue_register where cust_code not like 0000 order by iv_no DESC",
+          "select * from material_issue_register where cust_code not like 0000 order by iv_no DESC limit 200",
           (err, data) => {
             if (err) logger.error(err);
             res.send(data);
@@ -139,7 +139,7 @@ materialIssueRegisterRouter.get(
     } else if (type === "sales") {
       try {
         await misQueryMod(
-          "select * from material_issue_register where cust_code = 0000 order by iv_no DESC",
+          "select * from material_issue_register where cust_code = 0000 order by iv_no DESC limit 200",
           (err, data) => {
             if (err) logger.error(err);
             res.send(data);
@@ -151,7 +151,7 @@ materialIssueRegisterRouter.get(
     } else if (type === "cancelled") {
       try {
         await misQueryMod(
-          "select * from material_issue_register where ivstatus like 'cancelled' order by iv_no DESC",
+          "select * from material_issue_register where ivstatus like 'cancelled' order by iv_no DESC limit 200",
           (err, data) => {
             if (err) logger.error(err);
             res.send(data);

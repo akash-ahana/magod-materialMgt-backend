@@ -132,6 +132,24 @@ mtrlReceiptDetailsRouter.post(
 );
 
 mtrlReceiptDetailsRouter.post(
+  "/updateMtrlReceiptDetailsUpdated",
+  async (req, res, next) => {
+    try {
+      let { id, upDated } = req.body;
+      misQueryMod(
+        `update mtrlreceiptdetails set Updated = ${upDated} where Mtrl_Rv_id = ${id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+mtrlReceiptDetailsRouter.post(
   "/deleteMtrlReceiptDetails",
   async (req, res, next) => {
     try {
