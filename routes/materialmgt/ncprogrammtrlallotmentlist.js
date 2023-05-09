@@ -39,4 +39,24 @@ ncprogrammtrlallotmentlistRouter.post(
   }
 );
 
+ncprogrammtrlallotmentlistRouter.post(
+  "/updatencprogrammtrlallotmentlistReturnStock",
+  async (req, res, next) => {
+    try {
+      let { id } = req.body;
+      misQueryMod(
+        `UPDATE ncprogrammtrlallotmentlist n 
+        SET n.ReturnToStock=-1
+        WHERE n.NcPgmMtrlId=${id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = ncprogrammtrlallotmentlistRouter;

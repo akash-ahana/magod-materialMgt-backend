@@ -160,20 +160,96 @@ mtrlStockListRouter.post("/updateMtrlStockLock", async (req, res, next) => {
   }
 });
 
+mtrlStockListRouter.post("/updateMtrlStockLock1", async (req, res, next) => {
+  try {
+    let { DynamicPara1, DynamicPara2, LocationNo, Weight, MtrlStockID } =
+      req.body;
+    misQueryMod(
+      `UPDATE magodmis.mtrlstocklist m 
+      SET  m.Locked=0, m.DynamicPara1=${DynamicPara1},
+      m.DynamicPara2=${DynamicPara2}, m.LocationNo ='${LocationNo}', m.Weight =${Weight} 
+      WHERE m.MtrlStockID='${MtrlStockID}'`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+mtrlStockListRouter.post("/updateMtrlStockLock2", async (req, res, next) => {
+  try {
+    let { ScrapWeight, LocationNo, MtrlStockID } = req.body;
+    misQueryMod(
+      `UPDATE magodmis.mtrlstocklist m 
+      SET m.DynamicPara1=0,m.DynamicPara2=0,m.Weight=0, m.Scrap=-1, 
+      m.Locked=-1,m.ScrapWeight=${ScrapWeight}, m.LocationNo ='${LocationNo}' 
+      WHERE m.MtrlStockID='${MtrlStockID}'`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+mtrlStockListRouter.post("/updateMtrlStockLock3", async (req, res, next) => {
+  try {
+    let { LocationNo, MtrlStockID } = req.body;
+    misQueryMod(
+      `UPDATE magodmis.mtrlstocklist m 
+      SET m.DynamicPara1=0,m.DynamicPara2=0,m.Weight=0, m.Scrap=-1, 
+      m.Locked=-1, m.LocationNo ='${LocationNo}' 
+      WHERE m.MtrlStockID='${MtrlStockID}'`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 mtrlStockListRouter.post("/insertByReturnDetails", async (req, res, next) => {
   try {
     let { Iv_Id, IV_No } = req.body;
-    /*console.log(
-      `INSERT INTO  mtrlstocklist(MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No, Mtrl_Code, Shape, Material, DynamicPara1,
-      DynamicPara2, DynamicPara3, DynamicPara4, Locked, Scrap, Issue, Weight,ScrapWeight,  NCProgramNo, LocationNo) 
-      SELECT MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No,Mtrl_Code, Shape, Material, DynamicPara1, DynamicPara2, DynamicPara3,
-      DynamicPara4, Locked, Scrap, Issue, Weight, ScrapWeight,  NCProgramNo, LocationNo FROM materialreturneddetails WHERE IV_No = '${IV_No}'`
-    );*/
     misQueryMod(
       `INSERT INTO  mtrlstocklist(MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No, Mtrl_Code, Shape, Material, DynamicPara1,
         DynamicPara2, DynamicPara3, DynamicPara4, Locked, Scrap, Issue, Weight,ScrapWeight,  NCProgramNo, LocationNo) 
         SELECT MtrlStockID, Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No,Mtrl_Code, Shape, Material, DynamicPara1, DynamicPara2, DynamicPara3,
         DynamicPara4, Locked, Scrap, Issue, Weight, ScrapWeight,  NCProgramNo, LocationNo FROM materialreturneddetails WHERE IV_No = '${IV_No}'`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+mtrlStockListRouter.post("/insertByMtrlStockID", async (req, res, next) => {
+  try {
+    let {
+      DynamicPara1,
+      DynamicPara2,
+      DynamicPara3,
+      LocationNo,
+      Weight,
+      MtrlStockID,
+      MtrlStockIDNew,
+    } = req.body;
+    misQueryMod(
+      `INSERT INTO magodmis.mtrlstocklist (MtrlStockID,Mtrl_Rv_id, Cust_Code, Customer, RV_No, Cust_Docu_No, Mtrl_Code, Shape, 
+      Material, DynamicPara1, DynamicPara2, DynamicPara3, LocationNo, Weight) 
+      SELECT  ${MtrlStockIDNew}, m.Mtrl_Rv_id, m.Cust_Code, m.Customer, m.RV_No, m.Cust_Docu_No, m.Mtrl_Code, m.Shape, m.Material, 
+      ${DynamicPara1}, ${DynamicPara2},${DynamicPara3}, ${LocationNo}, ${Weight} FROM magodmis.mtrlstocklist m 
+      WHERE m.MtrlStockID= '${MtrlStockID}' `,
       (err, data) => {
         if (err) logger.error(err);
         res.send(data);
