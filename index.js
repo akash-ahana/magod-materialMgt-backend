@@ -94,6 +94,10 @@ app.use("/mtrlPartIssueDetails", mtrlPartIssueDetailsRouter);
 const shopFloorIssueRouter = require("./routes/materialmgt/shopFloorIssue");
 app.use("/shopFloorIssue", shopFloorIssueRouter);
 
+//shop floor return
+const shopFloorReturnRouter = require("./routes/materialmgt/shopFloorReturn");
+app.use("/shopFloorReturn", shopFloorReturnRouter);
+
 //shopfloorAllotment
 const shopFloorAllotmentRouter = require("./routes/materialmgt/shopfloorAllotment");
 app.use("/shopfloorAllotment", shopFloorAllotmentRouter);

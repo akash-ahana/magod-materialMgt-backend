@@ -24,4 +24,24 @@ shopfloorMaterialIssueRegisterRouter.post(
   }
 );
 
+shopfloorMaterialIssueRegisterRouter.post(
+  "/updateShopfloorMaterialIssueRegisterQtyReturnedAddOne",
+  async (req, res, next) => {
+    try {
+      let { id } = req.body;
+      misQueryMod(
+        `UPDATE magodmis.\`shopfloor_material _issueregister\` s 
+        SET s.QtyReturned= s.QtyReturned+1 
+        WHERE s.IssueID=@IssueID = ${id}`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = shopfloorMaterialIssueRegisterRouter;
