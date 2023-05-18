@@ -6,9 +6,6 @@ const { logger } = require("../../helpers/logger");
 mtrlStockListRouter.get("/checkStockAvailable", async (req, res, next) => {
   try {
     let rvno = req.query.rvno;
-    // console.log(
-    //   `Select * from magodmis.mtrlstocklist where RV_No =  "${rvno}"`
-    // );
     misQueryMod(
       `Select * from magodmis.mtrlstocklist where RV_No =  "${rvno}"`,
       (err, data) => {
