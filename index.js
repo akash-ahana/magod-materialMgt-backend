@@ -129,6 +129,14 @@ app.use(
 const ncprogrammtrlallotmentlistRouter = require("./routes/materialmgt/ncprogrammtrlallotmentlist");
 app.use("/ncprogrammtrlallotmentlist", ncprogrammtrlallotmentlistRouter);
 
+//store router
+const storeRouter = require("./routes/materialmgt/storeMng");
+app.use("/storeMng", storeRouter);
+
+//report router
+const reportRouter = require("./routes/materialmgt/report");
+app.use("/report", reportRouter);
+
 /*app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send({

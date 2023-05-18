@@ -21,4 +21,18 @@ shapeRouter.get("/getRowByShape", async (req, res, next) => {
   }
 });
 
+shapeRouter.get("/getAllShapeNames", async (req, res, next) => {
+  try {
+    misQueryMod(
+      `SELECT s.Shape FROM magodmis.shapes s ORDER BY s.Shape`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = shapeRouter;
