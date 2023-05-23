@@ -325,4 +325,49 @@ storeRouter.post("/insertStockDispatchMtrlSales", async (req, res, next) => {
   }
 });
 
+//Location Stock
+
+storeRouter.get("/getLocationStockSecond", async (req, res, next) => {
+  let location = req.query.location;
+  try {
+    mtrlQueryMod(
+      `SELECT m.Cust_Code, m.Customer, m.Mtrl_Code, m.DynamicPara1,
+      m.DynamicPara2, m.Scrap, Sum(m.Weight) as Weight, sum(m.ScrapWeight) as SWeight,
+      m.LocationNo, count(m.MtrlStockID) as Quantity 
+      FROM magodmis.mtrlstocklist m WHERE m.LocationNo='${location}' 
+      GROUP BY m.Mtrl_Code, m.Cust_Code,  m.Customer,m.Scrap, m.DynamicPara1, m.DynamicPara2
+      order by m.Mtrl_Code`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+storeRouter.get("/getLocationStockThird", async (req, res, next) => {
+  let location = req.query.location;
+  let mtrlcode = req.query.mtrlcode;
+  let para1 = req.query.para1;
+  let para2 = req.query.para2;
+  let custcode = req.query.custcode;
+  let scrap = req.query.scrap;
+  try {
+    mtrlQueryMod(
+      `SELECT * FROM magodmis.mtrlstocklist m 
+      WHERE m.Mtrl_Code='${mtrlcode}' AND m.DynamicPara1=${para1} 
+      AND m.DynamicPara2=${para2} AND m.Cust_Code=${custcode} 
+      AND if(${scrap} ,m.Scrap, not m.Scrap) AND m.LocationNo='${location}'`,
+      (err, data) => {
+        if (err) logger.error(err);
+        res.send(data);
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = storeRouter;
