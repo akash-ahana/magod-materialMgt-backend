@@ -161,6 +161,118 @@ reportRouter.get(
   }
 );
 
+reportRouter.get(
+  "/getMonthlyReportMaterialSalesSummary",
+  async (req, res, next) => {
+    try {
+      let month = req.query.month;
+      let year = req.query.year;
+      misQueryMod(
+        `SELECT d.Material, sum(d.SrlWt) as SrlWt, f.DC_InvType
+        from magodmis.dc_inv_summary d , magodmis.draft_dc_inv_register f
+        WHERE d.dc_Inv_No=f.dc_Inv_no and
+        EXTRACT(YEAR from f.Inv_Date)=${year} and EXTRACT(MONTH from f.Inv_Date)=${month} and
+                    (f.DC_InvType ='Sales' or f.DC_InvType like 'Material%')
+       Group By d.material,f.DC_InvType`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+reportRouter.get(
+  "/getMonthlyReportMaterialPurchaseSummary",
+  async (req, res, next) => {
+    try {
+      let month = req.query.month;
+      let year = req.query.year;
+      misQueryMod(
+        `SELECT  m1.Material, sum(m1.TotalWeightCalculated) as TotalWeightCalculated,
+        sum(m1.TotalWeight) as TotalWeight, sum(m1.Qty) as qty 
+        FROM magodmis.material_receipt_register m,magodmis.mtrlreceiptdetails m1 
+        WHERE m.RV_No not like 'Draft' and m.RvID=m1.RvID AND m1.TotalWeightCalculated is not Null 
+        AND m1.Cust_Code='0000' AND 
+        EXTRACT(YEAR from m.RV_Date)=${year} and EXTRACT(MONTH from m.RV_Date)=${month} 
+        GROUP BY  m1.Material
+        order by Material`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+reportRouter.get(
+  "/getMonthlyReportMaterialSalesDetails",
+  async (req, res, next) => {
+    try {
+      let month = req.query.month;
+      let year = req.query.year;
+      misQueryMod(
+        `SELECT b.Cust_Name,b.Inv_Date,b.Inv_No,b.material,sum(b.srlWt) as SrlWt, b.DC_InvType FROM 
+        (SELECT A.* ,d.Mtrl, d.Material, d.SrlWt 
+         FROM (SELECT   d.DC_InvType, d.Cust_Name,d.Dc_Inv_No,d.Inv_No,d.Inv_Date 
+        FROM magodmis.draft_dc_inv_register d 
+        WHERE EXTRACT(YEAR from d.Inv_Date)=${year} and EXTRACT(MONTH from d.Inv_Date)=${month} 
+        AND  (d.DC_InvType like 'Sales' or d.DC_InvType like 'Material%') ) as A, 
+        magodmis.dc_inv_summary d WHERE a.dc_Inv_No=d.dc_Inv_no 
+       Order By a.DC_InvType) as B GROUP BY b.cust_Name, b.Inv_Date,b.Inv_No,b.material,b.DC_InvType
+       Order by b.cust_Name`,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+reportRouter.get(
+  "/getMonthlyReportMaterialHandlingSummary",
+  async (req, res, next) => {
+    try {
+      let month = req.query.month;
+      let year = req.query.year;
+      misQueryMod(
+        `SELECT  'Receipts' as Type ,m1.Material, sum(m1.TotalWeightCalculated) as TotalWeightCalculated, 
+        sum(m1.TotalWeight) as TotalWeight, sum(m1.Qty) as qty 
+        FROM magodmis.material_receipt_register m,magodmis.mtrlreceiptdetails m1 
+        WHERE m.RV_No not like 'Draft' and m.RvID=m1.RvID 
+        AND m1.TotalWeightCalculated is not Null 
+        AND EXTRACT(YEAR from m.RV_Date)=${year} and EXTRACT(MONTH from m.RV_Date)=${month} 
+        GROUP BY  m1.Material 
+        UNION 
+        SELECT   'Despatch' as Type, d.Material,sum(d.SrlWt) as TotalWeightCalculated,
+        sum(d.SrlWt) as TotalWeight,sum(d.TotQty) as Qty 
+        FROM (SELECT  d.DC_InvType, d.Dc_Inv_No 
+        FROM magodmis.draft_dc_inv_register d 
+        WHERE 
+        EXTRACT(YEAR from d.Inv_Date)=${year} and EXTRACT(MONTH from d.Inv_Date)=${month} AND
+        (d.Inv_No is not null and d.Inv_No  not like 'C%')) as A, 
+        magodmis.dc_inv_summary d WHERE a.dc_Inv_No=d.dc_Inv_no 
+        Group By d.material `,
+        (err, data) => {
+          if (err) logger.error(err);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 //Part List
 reportRouter.get("/getPartListInStockAndProcess", async (req, res, next) => {
   try {
