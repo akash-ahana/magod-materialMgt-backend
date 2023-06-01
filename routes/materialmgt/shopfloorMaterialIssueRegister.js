@@ -32,7 +32,7 @@ shopfloorMaterialIssueRegisterRouter.post(
       misQueryMod(
         `UPDATE magodmis.\`shopfloor_material _issueregister\` s 
         SET s.QtyReturned= s.QtyReturned+1 
-        WHERE s.IssueID=@IssueID = ${id}`,
+        WHERE s.IssueID = ${id}`,
         (err, data) => {
           if (err) logger.error(err);
           res.send(data);
